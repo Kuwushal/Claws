@@ -11,7 +11,7 @@
             <span>/</span>
             <a href="{% url 'store:product_list' %}">Shop</a>
             <span>/</span>
-            <a href="{% url 'store:product_list_by_category' product.category.slug %}">{{ product.category.name }}</a>
+            <a href="{% url 'store:product_list_by_category' product.category|lower|slugify %}">{{ product.category }}</a>
             <span>/</span>
             <span>{{ product.name }}</span>
         </nav>
@@ -20,7 +20,7 @@
             <div class="product-images-editorial animate-on-scroll" data-delay="0.2s">
                 <div class="main-image-container">
                     {% if product.image %}
-                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="main-image-editorial" id="mainImage">
+                    <img src="{{ product.image }}" alt="{{ product.name }}" class="main-image-editorial" id="mainImage">
                     {% endif %}
                     
                     {% if product.featured %}
@@ -41,15 +41,15 @@
                 <div class="image-gallery">
                     <div class="gallery-thumbnails">
                         {% if product.image %}
-                        <div class="thumbnail active" data-image="{{ product.image.url }}">
-                            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                        <div class="thumbnail active" data-image="{{ product.image }}">
+                            <img src="{{ product.image }}" alt="{{ product.name }}">
                         </div>
                         <!-- Additional placeholder thumbnails for demo -->
-                        <div class="thumbnail" data-image="{{ product.image.url }}">
-                            <img src="{{ product.image.url }}" alt="{{ product.name }} - View 2">
+                        <div class="thumbnail" data-image="{{ product.image }}">
+                            <img src="{{ product.image }}" alt="{{ product.name }} - View 2">
                         </div>
-                        <div class="thumbnail" data-image="{{ product.image.url }}">
-                            <img src="{{ product.image.url }}" alt="{{ product.name }} - View 3">
+                        <div class="thumbnail" data-image="{{ product.image }}">
+                            <img src="{{ product.image }}" alt="{{ product.name }} - View 3">
                         </div>
                         {% endif %}
                     </div>
@@ -66,7 +66,7 @@
 
             <div class="product-details-editorial animate-on-scroll" data-delay="0.4s">
                 <div class="product-header-editorial">
-                    <span class="product-category-editorial">{{ product.category.name }}</span>
+                    <span class="product-category-editorial">{{ product.category }}</span>
                     <h1 class="product-title-editorial">{{ product.name }}</h1>
                     <div class="product-price-editorial">${{ product.price }}</div>
                     

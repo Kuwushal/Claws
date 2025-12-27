@@ -9,11 +9,12 @@ from django.conf import settings
 import json
 import requests
 from .models import Product, Category, Cart, CartItem, Order, OrderItem
+from .static_data import get_featured_products, get_all_products, get_products_by_category, get_product_by_slug, get_all_categories, get_category_by_slug
 
 def home(request):
     try:
-        featured_products = Product.objects.filter(featured=True)[:9]
-        categories = Category.objects.all()
+        featured_products = get_featured_products()[:9]
+        categories = get_all_categories()
         return render(request, 'store/home.html', {
             'featured_products': featured_products,
             'categories': categories
@@ -25,12 +26,16 @@ def home(request):
 def product_list(request, category_slug=None):
     try:
         category = None
-        products = Product.objects.all()
-        categories = Category.objects.all()
+        categories = get_all_categories()
         
         if category_slug:
-            category = get_object_or_404(Category, slug=category_slug)
-            products = products.filter(category=category)
+            category = get_category_by_slug(category_slug)
+            if not category:
+                messages.error(request, 'Category not found')
+                return redirect('store:product_list')
+            products = get_products_by_category(category_slug)
+        else:
+            products = get_all_products()
         
         return render(request, 'store/product_list.html', {
             'products': products,
@@ -43,7 +48,10 @@ def product_list(request, category_slug=None):
 
 def product_detail(request, slug):
     try:
-        product = get_object_or_404(Product, slug=slug)
+        product = get_product_by_slug(slug)
+        if not product:
+            messages.error(request, 'Product not found')
+            return redirect('store:product_list')
         return render(request, 'store/product_detail.html', {'product': product})
     except Exception as e:
         messages.error(request, 'Product not found')

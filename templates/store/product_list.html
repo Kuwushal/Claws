@@ -19,7 +19,7 @@
                 <p class="drops-description animate-fade-up" data-delay="0.6s">{% if category %}Curated {{ category.name|lower }} pieces for the bold and fearless{% else %}Every piece in our collection, from streetwear essentials to limited drops{% endif %}</p>
             </div>
             <div class="drops-stats animate-on-scroll" data-delay="0.8s">
-                <div class="stat-item counter-stat" data-target="{{ products.count }}">
+                <div class="stat-item counter-stat" data-target="{{ products|length }}">
                     <span class="stat-number">0</span>
                     <span class="stat-label">Items</span>
                 </div>
@@ -71,25 +71,21 @@
         {% if products %}
         <div class="catalog-grid" id="productGrid">
             {% for product in products %}
-            <div class="card animate-on-scroll" data-delay="{{ forloop.counter0|floatformat:1 }}s" data-category="{{ product.category.name|lower }}" data-price="{{ product.price }}" data-name="{{ product.name|lower }}">
+            <div class="card animate-on-scroll" data-delay="{{ forloop.counter0|floatformat:1 }}s" data-category="{{ product.category|lower }}" data-price="{{ product.price }}" data-name="{{ product.name|lower }}">
                 <div class="card-img">
-                    {% if product.get_image_url %}
-                        <img src="{{ product.get_image_url }}" alt="{{ product.name }}" style="width: 100%; height: 180px; object-fit: cover; border-radius: 5px;">
-                    {% else %}
-                        <div style="width: 100%; height: 180px; background: linear-gradient(45deg, #2a2a2a, #3a3a3a); border-radius: 5px;"></div>
-                    {% endif %}
+                    <img src="{{ product.image }}" alt="{{ product.name }}" style="width: 100%; height: 180px; object-fit: cover; border-radius: 5px;">
                     {% if product.featured %}
                     <span class="featured-badge">Featured</span>
                     {% endif %}
                 </div>
                 <div class="card-title">{{ product.name }}</div>
-                <div class="card-subtitle">{{ product.category.name }}</div>
+                <div class="card-subtitle">{{ product.category }}</div>
                 <div class="card-divider"></div>
                 <div class="card-footer">
                     <div class="card-price">
                         <span>$</span>{{ product.price }}
                     </div>
-                    <a href="{{ product.get_absolute_url }}" class="card-btn">
+                    <a href="{% url 'store:product_detail' product.slug %}" class="card-btn">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                             <path d="m397.78 316h-205.13a15 15 0 0 1 -14.65-11.67l-34.54-150.48a15 15 0 0 1 14.62-18.36h274.27a15 15 0 0 1 14.65 18.36l-34.6 150.48a15 15 0 0 1 -14.62 11.67zm-193.19-30h181.25l27.67-120.48h-236.6z"/>
                             <path d="m222 450a57.48 57.48 0 1 1 57.48-57.48 57.54 57.54 0 0 1 -57.48 57.48zm0-84.95a27.48 27.48 0 1 0 27.48 27.47 27.5 27.5 0 0 0 -27.48-27.47z"/>

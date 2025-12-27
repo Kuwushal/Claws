@@ -86,20 +86,16 @@
             {% for product in featured_products %}
             <div class="card animate-on-scroll" data-delay="{{ forloop.counter0|floatformat:1 }}s">
                 <div class="card-img">
-                    {% if product.get_image_url %}
-                        <img src="{{ product.get_image_url }}" alt="{{ product.name }}" style="width: 100%; height: 180px; object-fit: cover; border-radius: 5px;">
-                    {% else %}
-                        <div style="width: 100%; height: 180px; background: linear-gradient(45deg, #2a2a2a, #3a3a3a); border-radius: 5px;"></div>
-                    {% endif %}
+                    <img src="{{ product.image }}" alt="{{ product.name }}" style="width: 100%; height: 180px; object-fit: cover; border-radius: 5px;">
                 </div>
                 <div class="card-title">{{ product.name }}</div>
-                <div class="card-subtitle">{{ product.category.name }}</div>
+                <div class="card-subtitle">{{ product.category }}</div>
                 <div class="card-divider"></div>
                 <div class="card-footer">
                     <div class="card-price">
                         <span>$</span>{{ product.price }}
                     </div>
-                    <a href="{{ product.get_absolute_url }}" class="card-btn">
+                    <a href="{% url 'store:product_detail' product.slug %}" class="card-btn">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                             <path d="m397.78 316h-205.13a15 15 0 0 1 -14.65-11.67l-34.54-150.48a15 15 0 0 1 14.62-18.36h274.27a15 15 0 0 1 14.65 18.36l-34.6 150.48a15 15 0 0 1 -14.62 11.67zm-193.19-30h181.25l27.67-120.48h-236.6z"/>
                             <path d="m222 450a57.48 57.48 0 1 1 57.48-57.48 57.54 57.54 0 0 1 -57.48 57.48zm0-84.95a27.48 27.48 0 1 0 27.48 27.47 27.5 27.5 0 0 0 -27.48-27.47z"/>
@@ -127,17 +123,7 @@
             <div class="collection-card animate-on-scroll" data-delay="{{ forloop.counter0|floatformat:1 }}s">
                 <a href="{% url 'store:product_list_by_category' category.slug %}" class="collection-link">
                     <div class="collection-image">
-                        {% if category.name|lower == 'pants' or category.name|lower == 'jeans' or category.name|lower == 'trousers' %}
-                            <img src="https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&h=400&fit=crop" alt="{{ category.name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                        {% elif forloop.counter == 1 %}
-                            <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&h=400&fit=crop" alt="{{ category.name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                        {% elif forloop.counter == 2 %}
-                            <img src="https://images.unsplash.com/photo-1445205170230-053b83016050?w=600&h=400&fit=crop" alt="{{ category.name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                        {% elif forloop.counter == 3 %}
-                            <img src="https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=600&h=400&fit=crop" alt="{{ category.name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                        {% else %}
-                            <div style="width: 100%; height: 100%; background: linear-gradient(45deg, #2a2a2a, #3a3a3a);"></div>
-                        {% endif %}
+                        <img src="{{ category.image }}" alt="{{ category.name }}" style="width: 100%; height: 100%; object-fit: cover;">
                         <div class="collection-overlay">
                             <h3 class="collection-name">{{ category.name|upper }}</h3>
                             <span class="collection-cta">EXPLORE COLLECTION</span>
