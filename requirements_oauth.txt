@@ -1,0 +1,1 @@
+django-allauth==0.57.0

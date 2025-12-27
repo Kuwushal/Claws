@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block title %}Order History - CLAWS{% endblock %}
+
+{% block content %}
+<div class="order-history-editorial">
+    <div class="container-editorial">
+        <div class="order-history-container">
+            <div class="order-history-header">
+                <span class="order-history-tag">ORDER HISTORY</span>
+                <h1 class="order-history-title">YOUR ORDERS</h1>
+                <p class="order-history-subtitle">Track your purchase history</p>
+            </div>
+            
+            <div class="order-list">
+                {% if orders %}
+                    {% for order in orders %}
+                    <div class="order-card">
+                        <div class="order-header">
+                            <div class="order-info">
+                                <h3>Order #{{ order.id }}</h3>
+                                <p class="order-date">{{ order.created|date:"M d, Y H:i" }}</p>
+                            </div>
+                            <div class="order-status">
+                                <span class="status-badge status-{{ order.status }}">{{ order.get_status_display }}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="order-details">
+                            <div class="order-items">
+                                {% for item in order.items.all %}
+                                <div class="order-item">
+                                    <span class="item-name">{{ item.product.name }}</span>
+                                    <span class="item-details">Size: {{ item.size }} | Qty: {{ item.quantity }}</span>
+                                    <span class="item-price">${{ item.get_total_price }}</span>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            
+                            <div class="order-summary">
+                                <div class="summary-row">
+                                    <span>Payment Method:</span>
+                                    <span>{{ order.get_payment_method_display }}</span>
+                                </div>
+                                <div class="summary-row total">
+                                    <span>Total:</span>
+                                    <span>${{ order.total_amount }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-orders">
+                        <h3>No Orders Yet</h3>
+                        <p>You haven't placed any orders. Start shopping to see your order history here.</p>
+                        <a href="{% url 'store:product_list' %}" class="history-btn">
+                            START SHOPPING
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M19 7h-2V6a3 3 0 0 0-6 0v1H9a1 1 0 0 0-1 1v11a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3V8a1 1 0 0 0-1-1zM13 6a1 1 0 0 1 2 0v1h-2V6zm5 13a1 1 0 0 1-1 1h-6a1 1 0 0 1-1-1V9h8v10z"/>
+                            </svg>
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile - CLAWS{% endblock %}
+
+{% block content %}
+<div class="profile-editorial">
+    <div class="container-editorial">
+        <div class="profile-container">
+            <div class="profile-header">
+                <span class="profile-tag">USER PROFILE</span>
+                <h1 class="profile-title">{{ user.username|default:user.email }}</h1>
+                <p class="profile-subtitle">Your account information</p>
+            </div>
+            
+            <div class="profile-info">
+                <div class="info-section">
+                    <h3>Account Details</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <label>Username:</label>
+                            <span>{{ user.username|default:"Not set" }}</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Email:</label>
+                            <span>{{ user.email }}</span>
+                        </div>
+                        <div class="info-item">
+                            <label>First Name:</label>
+                            <span>{{ user.first_name|default:"Not set" }}</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Last Name:</label>
+                            <span>{{ user.last_name|default:"Not set" }}</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Date Joined:</label>
+                            <span>{{ user.date_joined|date:"M d, Y" }}</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Last Login:</label>
+                            <span>{{ user.last_login|date:"M d, Y H:i"|default:"Never" }}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="profile-actions">
+                    <a href="{% url 'store:order_history' %}" class="profile-btn">
+                        VIEW ORDER HISTORY
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

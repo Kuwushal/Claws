@@ -1,0 +1,406 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Checkout - CLAWS{% endblock %}
+
+{% block content %}
+<section class="checkout-editorial">
+    <div class="container-editorial">
+        <div class="checkout-header animate-fade-up">
+            <h1 class="checkout-title">CHECKOUT</h1>
+            <div class="checkout-steps">
+                <div class="step active">
+                    <span class="step-number">1</span>
+                    <span class="step-label">Shipping</span>
+                </div>
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <span class="step-label">Payment</span>
+                </div>
+                <div class="step">
+                    <span class="step-number">3</span>
+                    <span class="step-label">Review</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="checkout-content">
+            <div class="checkout-form animate-on-scroll" data-delay="0.2s">
+                <form class="checkout-form-container" id="checkoutForm">
+                    {% csrf_token %}
+                    
+                    <!-- Contact Information -->
+                    <div class="form-section">
+                        <h3 class="section-title">Contact Information</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Email Address *</label>
+                                <input type="email" name="email" class="form-input" required>
+                                <div class="form-hint">We'll send your order confirmation here</div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Phone Number</label>
+                                <input type="tel" name="phone" class="form-input">
+                                <div class="form-hint">For delivery updates (optional)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Shipping Address -->
+                    <div class="form-section">
+                        <h3 class="section-title">Shipping Address</h3>
+                        <div class="form-row">
+                            <div class="form-group half">
+                                <label class="form-label">First Name *</label>
+                                <input type="text" name="first_name" class="form-input" required>
+                            </div>
+                            <div class="form-group half">
+                                <label class="form-label">Last Name *</label>
+                                <input type="text" name="last_name" class="form-input" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Address *</label>
+                                <input type="text" name="address" class="form-input" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Apartment, suite, etc. (optional)</label>
+                                <input type="text" name="address2" class="form-input">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group third">
+                                <label class="form-label">City *</label>
+                                <input type="text" name="city" class="form-input" required>
+                            </div>
+                            <div class="form-group third">
+                                <label class="form-label">State *</label>
+                                <select name="state" class="form-select" required>
+                                    <option value="">Select State</option>
+                                    <option value="AL">Alabama</option>
+                                    <option value="CA">California</option>
+                                    <option value="FL">Florida</option>
+                                    <option value="NY">New York</option>
+                                    <option value="TX">Texas</option>
+                                    <!-- Add more states as needed -->
+                                </select>
+                            </div>
+                            <div class="form-group third">
+                                <label class="form-label">ZIP Code *</label>
+                                <input type="text" name="zip_code" class="form-input" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Shipping Method -->
+                    <div class="form-section">
+                        <h3 class="section-title">Shipping Method</h3>
+                        <div class="shipping-options">
+                            <div class="shipping-option">
+                                <input type="radio" name="shipping_method" value="standard" id="standard" checked>
+                                <label for="standard" class="shipping-label">
+                                    <div class="shipping-info">
+                                        <span class="shipping-name">Standard Shipping</span>
+                                        <span class="shipping-time">5-7 business days</span>
+                                    </div>
+                                    <span class="shipping-price">FREE</span>
+                                </label>
+                            </div>
+                            <div class="shipping-option">
+                                <input type="radio" name="shipping_method" value="express" id="express">
+                                <label for="express" class="shipping-label">
+                                    <div class="shipping-info">
+                                        <span class="shipping-name">Express Shipping</span>
+                                        <span class="shipping-time">2-3 business days</span>
+                                    </div>
+                                    <span class="shipping-price">$15.00</span>
+                                </label>
+                            </div>
+                            <div class="shipping-option">
+                                <input type="radio" name="shipping_method" value="overnight" id="overnight">
+                                <label for="overnight" class="shipping-label">
+                                    <div class="shipping-info">
+                                        <span class="shipping-name">Overnight Shipping</span>
+                                        <span class="shipping-time">1 business day</span>
+                                    </div>
+                                    <span class="shipping-price">$35.00</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Information -->
+                    <div class="form-section">
+                        <h3 class="section-title">Payment Information</h3>
+                        
+                        <!-- Payment Method Selection -->
+                        <div class="payment-methods">
+                            <div class="payment-method">
+                                <input type="radio" name="payment_method" value="card" id="card" checked>
+                                <label for="card" class="payment-label">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
+                                    </svg>
+                                    Credit/Debit Card
+                                </label>
+                            </div>
+                            <div class="payment-method">
+                                <input type="radio" name="payment_method" value="paypal" id="paypal">
+                                <label for="paypal" class="payment-label">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c-.013.076-.026.175-.041.26-.93 4.778-4.005 7.201-9.138 7.201h-2.19a.9.9 0 0 0-.895.765l-.94 5.982a.641.641 0 0 0 .633.74h4.25a.9.9 0 0 0 .895-.765l.77-4.924.024-.194h.016c.663 0 1.299-.04 1.907-.116a8.51 8.51 0 0 0 4.316-1.408z"/>
+                                    </svg>
+                                    PayPal
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Card Details -->
+                        <div class="card-details" id="cardDetails">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Card Number *</label>
+                                    <input type="text" name="card_number" class="form-input card-input" placeholder="1234 5678 9012 3456" required>
+                                    <div class="card-icons">
+                                        <svg class="card-icon visa" width="32" height="20" viewBox="0 0 32 20">
+                                            <path fill="#1434CB" d="M13.8 3.2l-1.2 13.6h-1.9L12 3.2h1.8z"/>
+                                        </svg>
+                                        <svg class="card-icon mastercard" width="32" height="20" viewBox="0 0 32 20">
+                                            <circle fill="#EB001B" cx="11" cy="10" r="7"/>
+                                            <circle fill="#F79E1B" cx="21" cy="10" r="7"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group half">
+                                    <label class="form-label">Expiry Date *</label>
+                                    <input type="text" name="expiry" class="form-input" placeholder="MM/YY" required>
+                                </div>
+                                <div class="form-group half">
+                                    <label class="form-label">CVV *</label>
+                                    <input type="text" name="cvv" class="form-input" placeholder="123" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Cardholder Name *</label>
+                                    <input type="text" name="cardholder_name" class="form-input" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PayPal Payment -->
+                        <div class="paypal-details" id="paypalDetails" style="display: none;">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">PayPal Payment</label>
+                                    <div id="paypal-button-container" style="margin-top: 15px; min-height: 50px; border: 1px solid #ccc; padding: 10px; text-align: center;">
+                                        Loading PayPal...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Order Notes -->
+                    <div class="form-section">
+                        <h3 class="section-title">Order Notes (Optional)</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <textarea name="order_notes" class="form-textarea" placeholder="Special delivery instructions, gift message, etc."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="form-actions">
+                        <a href="{% url 'store:cart' %}" class="btn-secondary">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                            </svg>
+                            BACK TO CART
+                        </a>
+                        <button type="submit" class="btn-primary checkout-submit" id="cardSubmitBtn">
+                            <span class="btn-text">COMPLETE ORDER</span>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="order-summary animate-on-scroll" data-delay="0.4s">
+                <div class="summary-card">
+                    <h3 class="summary-title">ORDER SUMMARY</h3>
+                    
+                    <div class="summary-items">
+                        {% if cart and cart.items.all %}
+                        {% for item in cart.items.all %}
+                        <div class="summary-item">
+                            <div class="item-image">
+                                {% if item.product.image %}
+                                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                                {% endif %}
+                                <span class="item-quantity">{{ item.quantity }}</span>
+                            </div>
+                            <div class="item-details">
+                                <h4 class="item-name">{{ item.product.name }}</h4>
+                                <p class="item-variant">Size: {{ item.size }}</p>
+                            </div>
+                            <div class="item-price">${{ item.get_total_price }}</div>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                    
+                    <div class="summary-calculations">
+                        <div class="calc-row">
+                            <span class="calc-label">Subtotal</span>
+                            <span class="calc-value" id="checkoutSubtotal">$0.00</span>
+                        </div>
+                        <div class="calc-row">
+                            <span class="calc-label">Shipping</span>
+                            <span class="calc-value" id="checkoutShipping">FREE</span>
+                        </div>
+                        <div class="calc-row">
+                            <span class="calc-label">Tax</span>
+                            <span class="calc-value" id="checkoutTax">$0.00</span>
+                        </div>
+                        <div class="calc-divider"></div>
+                        <div class="calc-row calc-total">
+                            <span class="calc-label">Total</span>
+                            <span class="calc-value" id="checkoutTotal">${{ cart.get_total_price|default:"0.00" }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trust Badges -->
+                <div class="trust-badges">
+                    <div class="trust-badge">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+                        </svg>
+                        <div class="badge-text">
+                            <span class="badge-title">Secure Payment</span>
+                            <span class="badge-subtitle">SSL Encrypted</span>
+                        </div>
+                    </div>
+                    <div class="trust-badge">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        </svg>
+                        <div class="badge-text">
+                            <span class="badge-title">Money Back</span>
+                            <span class="badge-subtitle">30 Day Guarantee</span>
+                        </div>
+                    </div>
+                    <div class="trust-badge">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9z"/>
+                        </svg>
+                        <div class="badge-text">
+                            <span class="badge-title">Fast Shipping</span>
+                            <span class="badge-subtitle">2-3 Business Days</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Customer Support -->
+                <div class="customer-support">
+                    <h4>Need Help?</h4>
+                    <p>Our customer support team is here to help you complete your order.</p>
+                    <div class="support-options">
+                        <a href="mailto:support@claws.com" class="support-link">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                            </svg>
+                            Email Support
+                        </a>
+                        <a href="tel:+1234567890" class="support-link">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                            </svg>
+                            Call Us
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Processing Modal -->
+<div class="processing-modal" id="processingModal">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+        <div class="processing-animation">
+            <div class="processing-spinner"></div>
+            <h3>Processing Your Order</h3>
+            <p>Please don't close this window while we process your payment...</p>
+        </div>
+    </div>
+</div>
+
+<!-- PayPal SDK -->
+<script src="https://www.paypal.com/sdk/js?client-id=AaFLtosgMoN_nyrSsFZw-QkbZMZhzepIg9IOKtBhXICzFUKGKUelvZrYF-E6GbuzeeioPwIv4oMZktzj&currency=USD"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const cardRadio = document.getElementById('card');
+    const paypalRadio = document.getElementById('paypal');
+    const cardDetails = document.getElementById('cardDetails');
+    const paypalDetails = document.getElementById('paypalDetails');
+    const submitBtn = document.getElementById('cardSubmitBtn');
+    
+    function togglePaymentMethod() {
+        if (paypalRadio.checked) {
+            cardDetails.style.display = 'none';
+            paypalDetails.style.display = 'block';
+            submitBtn.textContent = 'Pay with PayPal below';
+            submitBtn.disabled = true;
+            setTimeout(initPayPal, 1000);
+        } else {
+            cardDetails.style.display = 'block';
+            paypalDetails.style.display = 'none';
+            submitBtn.innerHTML = '<span class="btn-text">COMPLETE ORDER</span>';
+            submitBtn.disabled = false;
+        }
+    }
+    
+    cardRadio.addEventListener('change', togglePaymentMethod);
+    paypalRadio.addEventListener('change', togglePaymentMethod);
+    
+    function initPayPal() {
+        const container = document.getElementById('paypal-button-container');
+        container.innerHTML = '';
+        
+        if (window.paypal) {
+            paypal.Buttons({
+                createOrder: function(data, actions) {
+                    return actions.order.create({
+                        purchase_units: [{
+                            amount: { value: '{{ cart.get_total_price|default:"10.00" }}' }
+                        }]
+                    });
+                },
+                onApprove: function(data, actions) {
+                    return actions.order.capture().then(function(details) {
+                        alert('Payment successful! Order: ' + data.orderID);
+                    });
+                }
+            }).render('#paypal-button-container');
+        } else {
+            container.innerHTML = 'PayPal not loaded';
+        }
+    }
+});
+</script>
+{% endblock %}

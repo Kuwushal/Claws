@@ -1,0 +1,12 @@
+.env
+.env.*
+__pycache__/
+db.sqlite3
+staticfiles/
+media/
+*.pyc
+.DS_Store
+
+GOOGLE_CLIENT_ID=your_google_client_id_here
+GOOGLE_CLIENT_SECRET=your_google_client_secret_here
+

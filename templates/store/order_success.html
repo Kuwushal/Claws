@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+
+{% block title %}Order Success - CLAWS{% endblock %}
+
+{% block content %}
+<div class="auth-editorial">
+    <div class="container-editorial">
+        <div class="auth-container">
+            <div class="auth-header">
+                <span class="auth-tag">ORDER COMPLETE</span>
+                <h1 class="auth-title">SUCCESS</h1>
+                <p class="auth-subtitle">Your order has been placed successfully!</p>
+            </div>
+            
+            <div class="auth-form-container">
+                <div class="order-details">
+                    <h3>Order #{{ order.id }}</h3>
+                    <p><strong>Total:</strong> ${{ order.total_amount }}</p>
+                    <p><strong>Payment Method:</strong> {{ order.get_payment_method_display }}</p>
+                    <p><strong>Status:</strong> {{ order.get_status_display }}</p>
+                </div>
+                
+                <div class="success-actions">
+                    <a href="{% url 'store:home' %}" class="auth-submit-btn">
+                        CONTINUE SHOPPING
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.auth-editorial {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 100%);
+    padding: 120px 0 80px;
+    display: flex;
+    align-items: center;
+}
+
+.auth-container {
+    max-width: 480px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    padding: 60px 40px;
+    text-align: center;
+}
+
+.auth-tag {
+    display: inline-block;
+    background: rgba(76, 175, 80, 0.2);
+    color: #4CAF50;
+    padding: 8px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    border: 1px solid rgba(76, 175, 80, 0.3);
+    border-radius: 20px;
+}
+
+.auth-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 48px;
+    font-weight: 900;
+    color: #ffffff;
+    margin: 0 0 15px 0;
+}
+
+.auth-subtitle {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0 0 50px 0;
+}
+
+.order-details {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 30px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    text-align: left;
+}
+
+.order-details h3 {
+    color: #ffffff;
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+.order-details p {
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.auth-submit-btn {
+    background: #ffffff;
+    color: #0d0d0d;
+    border: none;
+    padding: 18px 24px;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+
+.auth-submit-btn:hover {
+    background: rgba(255, 255, 255, 0.9);
+    transform: translateY(-2px);
+}
+</style>
+{% endblock %}

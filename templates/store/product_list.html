@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_js %}
+<script src="{% static 'js/products.js' %}"></script>
+{% endblock %}
+
+{% block title %}
+{% if category %}{{ category.name }} - CLAWS{% else %}All Drops - CLAWS{% endif %}
+{% endblock %}
+
+{% block content %}
+<section class="drops-header">
+    <div class="container-editorial">
+        <div class="drops-hero animate-on-scroll">
+            <div class="drops-meta">
+                <span class="drops-tag animate-fade-up" data-delay="0.2s">{% if category %}{{ category.name|upper }}{% else %}ALL DROPS{% endif %}</span>
+                <h1 class="drops-title animate-fade-up" data-delay="0.4s">{% if category %}{{ category.name }} Collection{% else %}Complete Archive{% endif %}</h1>
+                <p class="drops-description animate-fade-up" data-delay="0.6s">{% if category %}Curated {{ category.name|lower }} pieces for the bold and fearless{% else %}Every piece in our collection, from streetwear essentials to limited drops{% endif %}</p>
+            </div>
+            <div class="drops-stats animate-on-scroll" data-delay="0.8s">
+                <div class="stat-item counter-stat" data-target="{{ products.count }}">
+                    <span class="stat-number">0</span>
+                    <span class="stat-label">Items</span>
+                </div>
+                <div class="stat-item counter-stat" data-target="{{ products|length }}">
+                    <span class="stat-number">0</span>
+                    <span class="stat-label">Available</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Filter and Sort Controls -->
+<section class="catalog-controls animate-on-scroll">
+    <div class="container-editorial">
+        <div class="controls-wrapper">
+            <div class="filter-controls">
+                <button class="filter-btn active" data-filter="all">ALL</button>
+                {% for category in categories %}
+                <button class="filter-btn" data-filter="{{ category.name|lower }}">{{ category.name|upper }}</button>
+                {% endfor %}
+            </div>
+            <div class="sort-controls">
+                <select class="sort-select" id="sortSelect">
+                    <option value="newest">NEWEST FIRST</option>
+                    <option value="price-low">PRICE: LOW TO HIGH</option>
+                    <option value="price-high">PRICE: HIGH TO LOW</option>
+                    <option value="name">NAME A-Z</option>
+                </select>
+            </div>
+            <div class="view-controls">
+                <button class="view-btn active" data-view="grid" title="Grid View">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M3 3h7v7H3V3zm0 11h7v7H3v-7zm11-11h7v7h-7V3zm0 11h7v7h-7v-7z"/>
+                    </svg>
+                </button>
+                <button class="view-btn" data-view="list" title="List View">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="drops-catalog">
+    <div class="container-editorial">
+        {% if products %}
+        <div class="catalog-grid" id="productGrid">
+            {% for product in products %}
+            <div class="card animate-on-scroll" data-delay="{{ forloop.counter0|floatformat:1 }}s" data-category="{{ product.category.name|lower }}" data-price="{{ product.price }}" data-name="{{ product.name|lower }}">
+                <div class="card-img">
+                    {% if product.get_image_url %}
+                        <img src="{{ product.get_image_url }}" alt="{{ product.name }}" style="width: 100%; height: 180px; object-fit: cover; border-radius: 5px;">
+                    {% else %}
+                        <div style="width: 100%; height: 180px; background: linear-gradient(45deg, #2a2a2a, #3a3a3a); border-radius: 5px;"></div>
+                    {% endif %}
+                    {% if product.featured %}
+                    <span class="featured-badge">Featured</span>
+                    {% endif %}
+                </div>
+                <div class="card-title">{{ product.name }}</div>
+                <div class="card-subtitle">{{ product.category.name }}</div>
+                <div class="card-divider"></div>
+                <div class="card-footer">
+                    <div class="card-price">
+                        <span>$</span>{{ product.price }}
+                    </div>
+                    <a href="{{ product.get_absolute_url }}" class="card-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path d="m397.78 316h-205.13a15 15 0 0 1 -14.65-11.67l-34.54-150.48a15 15 0 0 1 14.62-18.36h274.27a15 15 0 0 1 14.65 18.36l-34.6 150.48a15 15 0 0 1 -14.62 11.67zm-193.19-30h181.25l27.67-120.48h-236.6z"/>
+                            <path d="m222 450a57.48 57.48 0 1 1 57.48-57.48 57.54 57.54 0 0 1 -57.48 57.48zm0-84.95a27.48 27.48 0 1 0 27.48 27.47 27.5 27.5 0 0 0 -27.48-27.47z"/>
+                            <path d="m368.42 450a57.48 57.48 0 1 1 57.48-57.48 57.54 57.54 0 0 1 -57.48 57.48zm0-84.95a27.48 27.48 0 1 0 27.48 27.47 27.5 27.5 0 0 0 -27.48-27.47z"/>
+                            <path d="m158.08 165.49a15 15 0 0 1 -14.23-10.26l-25.71-77.23h-47.44a15 15 0 1 1 0-30h58.3a15 15 0 0 1 14.23 10.26l29.13 87.49a15 15 0 0 1 -14.23 19.74z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Load More Button -->
+        <div class="load-more-section animate-on-scroll">
+            <button class="load-more-btn" id="loadMoreBtn">
+                <span class="btn-text">LOAD MORE DROPS</span>
+                <div class="btn-loader">
+                    <div class="loader-dot"></div>
+                    <div class="loader-dot"></div>
+                    <div class="loader-dot"></div>
+                </div>
+            </button>
+        </div>
+        
+        {% else %}
+        <div class="empty-catalog animate-on-scroll">
+            <div class="empty-content">
+                <div class="empty-icon">
+                    <svg width="80" height="80" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19 7h-3V6a4 4 0 0 0-8 0v1H5a1 1 0 0 0-1 1v11a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V8a1 1 0 0 0-1-1zM10 6a2 2 0 0 1 4 0v1h-4V6zm8 15a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V9h2v1a1 1 0 0 0 2 0V9h4v1a1 1 0 0 0 2 0V9h2v12z"/>
+                    </svg>
+                </div>
+                <h2>No Drops Available</h2>
+                <p>This collection is currently being curated. Check back soon for new releases.</p>
+                <a href="{% url 'store:home' %}" class="btn-primary">Explore Other Collections</a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Quick Add Modal -->
+<div class="quick-add-modal" id="quickAddModal">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+        <button class="modal-close">&times;</button>
+        <div class="modal-product-info">
+            <div class="modal-image"></div>
+            <div class="modal-details">
+                <h3 class="modal-title"></h3>
+                <p class="modal-price"></p>
+                <form class="quick-add-form" id="quickAddForm">
+                    {% csrf_token %}
+                    <input type="hidden" name="product_id" id="modalProductId">
+                    <div class="size-selection">
+                        <label class="form-label">SIZE</label>
+                        <div class="size-options" id="modalSizeOptions">
+                            <!-- Sizes will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    <div class="quantity-selection">
+                        <label class="form-label">QUANTITY</label>
+                        <select name="quantity" class="quantity-select">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="add-to-cart-btn">ADD TO CART</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

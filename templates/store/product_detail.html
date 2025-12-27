@@ -1,0 +1,288 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ product.name }} - CLAWS{% endblock %}
+
+{% block content %}
+<section class="product-editorial">
+    <div class="container-editorial">
+        <nav class="product-breadcrumb animate-fade-up">
+            <a href="{% url 'store:home' %}">Home</a>
+            <span>/</span>
+            <a href="{% url 'store:product_list' %}">Shop</a>
+            <span>/</span>
+            <a href="{% url 'store:product_list_by_category' product.category.slug %}">{{ product.category.name }}</a>
+            <span>/</span>
+            <span>{{ product.name }}</span>
+        </nav>
+
+        <div class="product-hero">
+            <div class="product-images-editorial animate-on-scroll" data-delay="0.2s">
+                <div class="main-image-container">
+                    {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="main-image-editorial" id="mainImage">
+                    {% endif %}
+                    
+                    {% if product.featured %}
+                    <span class="product-badge-editorial">FEATURED</span>
+                    {% endif %}
+                    
+                    {% if product.stock < 10 %}
+                    <div class="scarcity-alert animate-pulse">
+                        <div class="scarcity-content">
+                            <span class="scarcity-icon">⚡</span>
+                            <span class="scarcity-text">Only {{ product.stock }} left in stock!</span>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Image Gallery Thumbnails -->
+                <div class="image-gallery">
+                    <div class="gallery-thumbnails">
+                        {% if product.image %}
+                        <div class="thumbnail active" data-image="{{ product.image.url }}">
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                        </div>
+                        <!-- Additional placeholder thumbnails for demo -->
+                        <div class="thumbnail" data-image="{{ product.image.url }}">
+                            <img src="{{ product.image.url }}" alt="{{ product.name }} - View 2">
+                        </div>
+                        <div class="thumbnail" data-image="{{ product.image.url }}">
+                            <img src="{{ product.image.url }}" alt="{{ product.name }} - View 3">
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- 360 View Button -->
+                <button class="view-360-btn" id="view360Btn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                    </svg>
+                    360° VIEW
+                </button>
+            </div>
+
+            <div class="product-details-editorial animate-on-scroll" data-delay="0.4s">
+                <div class="product-header-editorial">
+                    <span class="product-category-editorial">{{ product.category.name }}</span>
+                    <h1 class="product-title-editorial">{{ product.name }}</h1>
+                    <div class="product-price-editorial">${{ product.price }}</div>
+                    
+                    <!-- Stock Status -->
+                    <div class="stock-status">
+                        {% if product.stock > 10 %}
+                        <span class="stock-indicator in-stock">✓ In Stock</span>
+                        {% elif product.stock > 0 %}
+                        <span class="stock-indicator low-stock">⚠ Low Stock ({{ product.stock }} left)</span>
+                        {% else %}
+                        <span class="stock-indicator out-of-stock">✗ Out of Stock</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="product-story animate-fade-up" data-delay="0.6s">
+                    <h3>The Story</h3>
+                    <p>{{ product.description }}</p>
+                </div>
+
+                <form class="product-form-editorial" data-product-id="{{ product.id }}" id="productForm">
+                    {% csrf_token %}
+                    <input type="hidden" name="product_id" value="{{ product.id }}">
+                    
+                    <div class="form-section animate-fade-up" data-delay="0.8s">
+                        <label class="form-label">SIZE</label>
+                        <div class="size-grid" id="sizeGrid">
+                            {% for size in product.available_sizes %}
+                            <input type="radio" name="size" value="{{ size }}" id="size-{{ size }}" class="size-input">
+                            <label for="size-{{ size }}" class="size-label" data-size="{{ size }}">{{ size }}</label>
+                            {% endfor %}
+                        </div>
+                        <div class="size-guide-link">
+                            <a href="#" class="size-guide-btn" id="sizeGuideBtn">Size Guide</a>
+                        </div>
+                    </div>
+
+                    <div class="form-section animate-fade-up" data-delay="1s">
+                        <label class="form-label">QUANTITY</label>
+                        <div class="quantity-controls">
+                            <button type="button" class="quantity-btn" id="decreaseQty">-</button>
+                            <input type="number" name="quantity" value="1" min="1" max="{{ product.stock }}" class="quantity-input" id="quantityInput">
+                            <button type="button" class="quantity-btn" id="increaseQty">+</button>
+                        </div>
+                    </div>
+
+                    <div class="form-actions animate-fade-up" data-delay="1.2s">
+                        <button type="submit" class="add-to-cart-editorial" id="addToCartBtn">
+                            <span class="btn-text">ADD TO CART</span>
+                            <span class="btn-price">${{ product.price }}</span>
+                        </button>
+                        
+                        <div class="secondary-actions">
+                            <button type="button" class="wishlist-btn" data-product-id="{{ product.id }}">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                                </svg>
+                                Add to Wishlist
+                            </button>
+                            
+                            <button type="button" class="share-btn" id="shareBtn">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/>
+                                </svg>
+                                Share
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="product-details-grid animate-fade-up" data-delay="1.4s">
+                    <div class="detail-item">
+                        <h4>Materials</h4>
+                        <p>100% Premium Cotton<br>Pre-shrunk & Garment Dyed</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4>Care Instructions</h4>
+                        <p>Machine wash cold<br>Tumble dry low</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4>Shipping</h4>
+                        <p>Free shipping on orders over $75<br>2-3 business days</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4>Returns</h4>
+                        <p>30-day return policy<br>Free returns & exchanges</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Product Editorial Content -->
+<section class="product-editorial-content">
+    <div class="container-editorial">
+        <div class="editorial-spread animate-on-scroll">
+            <div class="spread-text">
+                <h2>Crafted for the Streets</h2>
+                <p class="spread-lead">Every piece in the CLAWS collection is designed with the urban explorer in mind. From the bustling city streets to underground venues, this is your armor.</p>
+                <p>Our design philosophy centers around functionality without compromising style. Each garment undergoes rigorous testing to ensure it can withstand the demands of street culture while maintaining its aesthetic appeal.</p>
+            </div>
+            <div class="spread-visual">
+                <div class="spread-image-1 parallax-element" data-speed="0.4"></div>
+                <div class="spread-image-2 parallax-element" data-speed="0.6"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Size Guide Modal -->
+<div class="size-guide-modal" id="sizeGuideModal">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+        <button class="modal-close">&times;</button>
+        <div class="size-guide-content">
+            <h3>Size Guide</h3>
+            <div class="size-chart">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Size</th>
+                            <th>Chest (in)</th>
+                            <th>Length (in)</th>
+                            <th>Shoulder (in)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>XS</td>
+                            <td>34-36</td>
+                            <td>27</td>
+                            <td>17</td>
+                        </tr>
+                        <tr>
+                            <td>S</td>
+                            <td>36-38</td>
+                            <td>28</td>
+                            <td>18</td>
+                        </tr>
+                        <tr>
+                            <td>M</td>
+                            <td>38-40</td>
+                            <td>29</td>
+                            <td>19</td>
+                        </tr>
+                        <tr>
+                            <td>L</td>
+                            <td>40-42</td>
+                            <td>30</td>
+                            <td>20</td>
+                        </tr>
+                        <tr>
+                            <td>XL</td>
+                            <td>42-44</td>
+                            <td>31</td>
+                            <td>21</td>
+                        </tr>
+                        <tr>
+                            <td>XXL</td>
+                            <td>44-46</td>
+                            <td>32</td>
+                            <td>22</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="size-tips">
+                <h4>Fit Tips</h4>
+                <ul>
+                    <li>All measurements are in inches</li>
+                    <li>For a relaxed fit, size up</li>
+                    <li>When in doubt, check our return policy</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Share Modal -->
+<div class="share-modal" id="shareModal">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+        <button class="modal-close">&times;</button>
+        <div class="share-content">
+            <h3>Share This Product</h3>
+            <div class="share-options">
+                <a href="#" class="share-option" data-platform="twitter">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/>
+                    </svg>
+                    Twitter
+                </a>
+                <a href="#" class="share-option" data-platform="facebook">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/>
+                    </svg>
+                    Facebook
+                </a>
+                <a href="#" class="share-option" data-platform="instagram">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                        <path d="m16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                    </svg>
+                    Instagram
+                </a>
+                <button class="share-option" id="copyLinkBtn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/>
+                        <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/>
+                    </svg>
+                    Copy Link
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
